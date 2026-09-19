@@ -14,6 +14,10 @@ app.Run(async (HttpContext context) =>
             Int32.TryParse(context.Request.Query["secondNumber"],out secondNumber);
             string? operation = context.Request.Query["operation"];
             string result;
+            if(firstNumber == 0 || secondNumber == 0)
+            {
+                throw new Exception("Ivalid input");
+            }
             switch (operation)
             {
                 case "add":
@@ -35,10 +39,10 @@ app.Run(async (HttpContext context) =>
             }
             await context.Response.WriteAsync($"<p>{result}<p>");
         }
-        catch
+        catch(Exception ex)
         {
             context.Response.StatusCode = 400;
-            await context.Response.WriteAsync("<h1>Error</h1>");
+            await context.Response.WriteAsync($"<h1>{ex.Message}</h1>");
         }
         ;
 
